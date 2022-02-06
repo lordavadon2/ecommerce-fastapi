@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 
 from ecommerce.db import Base
 from ecommerce.user.models import User
+from ecommerce.products.models import Product, Category
 
 load_dotenv()
 

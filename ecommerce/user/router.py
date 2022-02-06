@@ -26,13 +26,13 @@ async def create_user_registration(request: schema.User,
     return new_user
 
 
-@router.get('/', response_model=List[schema.DisplayUser])
+@router.get('/all', response_model=List[schema.DisplayUser])
 async def get_all_users(database: Session = Depends(db.get_db)) -> List[models.User]:
     return await services.get_all_users(database)
 
 
 @router.get('/{user_id}', response_model=schema.DisplayUser)
-async def get_all_users(user_id: int, database: Session = Depends(db.get_db)) -> models.User:
+async def get_category_by_id(user_id: int, database: Session = Depends(db.get_db)) -> models.User:
     return await services.get_user_by_id(user_id, database)
 
 
