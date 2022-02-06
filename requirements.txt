@@ -54,3 +54,4 @@ user-agent==0.1.9
 uvicorn==0.15.0
 weblib==0.1.30
 zipp==3.6.0
+email_validator==1.1.3
