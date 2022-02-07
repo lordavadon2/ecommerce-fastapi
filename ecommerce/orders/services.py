@@ -8,10 +8,11 @@ from ecommerce.cart import models as cart_models
 from ecommerce.orders import models, schema
 from ecommerce.orders.mail import send_email_background
 from ecommerce.user import models as user_models
+from ecommerce.user import schema as user_schema
 
 
-async def initiate_order(background_tasks: BackgroundTasks, db_session: Session) -> models.Order:
-    user_info = db_session.query(user_models.User).filter(user_models.User.email == "user@example.com").first()
+async def initiate_order(background_tasks: BackgroundTasks, current_user: user_schema.User, db_session: Session) -> models.Order:
+    user_info = db_session.query(user_models.User).filter(user_models.User.email == current_user.email).first()
     cart = db_session.query(cart_models.Cart).filter(cart_models.Cart.user_id == user_info.id).first()
 
     cart_items_objects = db_session.query(cart_models.CartItems).filter(cart_models.Cart.id == cart.id)
@@ -39,7 +40,7 @@ async def initiate_order(background_tasks: BackgroundTasks, db_session: Session)
     db_session.commit()
 
     # Send Email
-    send_email_background(background_tasks, 'example@gmail.com', schema.ShowOrder.from_orm(new_order))
+    send_email_background(background_tasks, current_user.email, schema.ShowOrder.from_orm(new_order))
 
     # clear items in cart once new order is placed
     db_session.query(cart_models.CartItems).filter(cart_models.CartItems.cart_id == cart.id).delete()
@@ -48,6 +49,6 @@ async def initiate_order(background_tasks: BackgroundTasks, db_session: Session)
     return new_order
 
 
-async def get_order_listing(db_session: Session) -> List[models.Order]:
-    user_info = db_session.query(user_models.User).filter(user_models.User.email == "user@example.com").first()
+async def get_order_listing(current_user: user_schema.User, db_session: Session) -> List[models.Order]:
+    user_info = db_session.query(user_models.User).filter(user_models.User.email == current_user.email).first()
     return db_session.query(models.Order).filter(models.Order.customer_id == user_info.id).all()

@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from starlette.responses import Response
 
+from ecommerce.auth.jwt import get_current_user
 from ecommerce.db import db
 from ecommerce.products import schema, services, models, validator
 
@@ -14,8 +15,9 @@ product_router = APIRouter(tags=['Products'], prefix='/products')
 
 
 @category_router.post('/create',
-             status_code=status.HTTP_201_CREATED,
-             response_model=schema.DisplayCategory)
+                      status_code=status.HTTP_201_CREATED,
+                      response_model=schema.DisplayCategory,
+                      dependencies=[Depends(get_current_user)])
 async def create_category(request: schema.Category,
                           database: Session = Depends(db.get_db)) -> models.Category:
     category = await validator.verify_category_exist(request.name, database)
@@ -38,13 +40,14 @@ async def get_category_by_id(category_id: int, database: Session = Depends(db.ge
     return await services.get_category_by_id(category_id, database)
 
 
-@category_router.delete('/{category_id}', status_code=status.HTTP_204_NO_CONTENT, response_class=Response)
+@category_router.delete('/{category_id}', status_code=status.HTTP_204_NO_CONTENT, response_class=Response,
+                        dependencies=[Depends(get_current_user)])
 async def delete_category_by_id(category_id: int, database: Session = Depends(db.get_db)):
     return await services.delete_category_by_id(category_id, database)
 
 
 @product_router.post('/create', status_code=status.HTTP_201_CREATED,
-             response_model=schema.ProductBase)
+                     response_model=schema.ProductBase, dependencies=[Depends(get_current_user)])
 async def create_product(request: schema.Product, database: Session = Depends(db.get_db)) -> models.Product:
     category = await validator.verify_category_exist_by_id(request.category_id, database)
     if not category:
@@ -67,6 +70,7 @@ async def get_product_by_id(product_id: int, database: Session = Depends(db.get_
     return await services.get_product_by_id(product_id, database)
 
 
-@product_router.delete('/{product_id}', status_code=status.HTTP_204_NO_CONTENT, response_class=Response)
+@product_router.delete('/{product_id}', status_code=status.HTTP_204_NO_CONTENT, response_class=Response,
+                       dependencies=[Depends(get_current_user)])
 async def delete_product_by_id(product_id: int, database: Session = Depends(db.get_db)):
     return await services.delete_product_by_id(product_id, database)
