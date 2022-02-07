@@ -8,9 +8,8 @@ from alembic import context
 
 from dotenv import load_dotenv
 
-from ecommerce.db import Base
-from ecommerce.user.models import User
-from ecommerce.products.models import Product, Category
+from ecommerce.db.db import Base
+from ecommerce.db.base import *
 
 load_dotenv()
 

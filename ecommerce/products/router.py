@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from starlette.responses import Response
 
-from ecommerce import db
+from ecommerce.db import db
 from ecommerce.products import schema, services, models, validator
 
 category_router = APIRouter(tags=['Categories'], prefix='/categories')

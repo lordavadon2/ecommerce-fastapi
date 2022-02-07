@@ -6,14 +6,15 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from starlette.responses import Response
 
-from ecommerce import db
+from ecommerce.db import db
 from ecommerce.user import schema, validator, services, models
 
 router = APIRouter(tags=['User'], prefix='/users')
 
 
 @router.post('/create',
-             status_code=status.HTTP_201_CREATED)
+             status_code=status.HTTP_201_CREATED,
+             response_model=schema.DisplayUser)
 async def create_user_registration(request: schema.User,
                                    database: Session = Depends(db.get_db)) -> models.User:
     user = await validator.verify_email_exist(request.email, database)

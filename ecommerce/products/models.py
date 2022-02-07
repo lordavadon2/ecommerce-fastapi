@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, Text
 from sqlalchemy.orm import relationship
-from ecommerce.db import Base
+from ecommerce.db.db import Base
 
 
 class Category(Base):
@@ -23,5 +23,5 @@ class Product(Base):
     category_id = Column(Integer, ForeignKey('category.id', ondelete="CASCADE"), )
     category = relationship("Category", back_populates="product")
     # order_details = relationship("OrderDetails", back_populates="product_order_details")
-    # cart_items = relationship("CartItems", back_populates="products")
+    cart_items = relationship("CartItems", back_populates="products")
 
