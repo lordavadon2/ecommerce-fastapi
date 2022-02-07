@@ -4,17 +4,18 @@ from typing import List
 
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
-from starlette.responses import Response
+from starlette.background import BackgroundTasks
 
 from ecommerce.db import db
 from ecommerce.orders import schema, services, models
+
 
 router = APIRouter(tags=['Orders'], prefix='/orders')
 
 
 @router.post('/add', status_code=status.HTTP_201_CREATED, response_model=schema.ShowOrder)
-async def initiate_order_processing(database: Session = Depends(db.get_db)) -> models.Order:
-    return await services.initiate_order(database)
+async def initiate_order_processing(background_tasks: BackgroundTasks, database: Session = Depends(db.get_db)) -> models.Order:
+    return await services.initiate_order(background_tasks, database)
 
 
 @router.get('/all', status_code=status.HTTP_200_OK, response_model=List[schema.ShowOrder])

@@ -1,7 +1,7 @@
 import datetime
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 from ecommerce.products.schema import ProductListing
 

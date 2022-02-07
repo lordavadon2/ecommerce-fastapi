@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI
 from ecommerce.user import router as user_router
 from ecommerce.cart import router as cart_router
@@ -14,3 +15,6 @@ app.include_router(cart_router.router)
 app.include_router(order_router.router)
 app.include_router(router.category_router)
 app.include_router(router.product_router)
+
+if __name__ == '__main__':
+    uvicorn.run('main:app', reload=True)
