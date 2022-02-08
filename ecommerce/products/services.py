@@ -5,7 +5,7 @@ from typing import List
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-from ecommerce.cart import models, schema
+from ecommerce.products import models, schema
 
 
 async def create_category(request: schema.Category, db_session: Session) -> models.Category:

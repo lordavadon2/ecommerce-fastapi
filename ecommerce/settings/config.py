@@ -9,6 +9,7 @@ DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD', '*******')
 DATABASE_HOST = os.getenv('DATABASE_HOST', '*******')
 DATABASE_PORT = os.getenv('DATABASE_PORT', '*******')
 DATABASE_NAME = os.getenv('DATABASE_NAME', '*******')
+TEST_DATABASE_NAME = os.getenv('DATABASE_NAME', 'test_db')
 
 
 MAIL_USERNAME = os.getenv('MAIL_USERNAME')
